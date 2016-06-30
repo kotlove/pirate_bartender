@@ -1,3 +1,5 @@
+import random
+
 questions = {
     "strong": "Do ye like yer drinks strong?",
     "salty": "Do ye like it with a salty tang?",
@@ -14,30 +16,71 @@ ingredients = {
     "fruity": ["slice of orange", "dash of cassis", "cherry on top"],
 }
 
-responses = {}
+adjectives = ["Fluffy ", "Salty "]
+nouns = ["Chincilla", "Sea-Dog"]
+
+drinknames = {}
+
+customers = {}
 
 def order():
-    """I ask the user the questions"""
+    responses = {}
     for key,val in questions.items():
-        responses[key] = input("{}".format(val))
+        print(val)
+        responses[key] = input().lower()
         if responses[key] == "y":
             responses[key] = True
         elif responses[key] == "yes":
             responses[key] = True
         else:
             responses[key] = False
+        print("")
+    return responses
 
-import random
-
-def recipe():
+def recipe(responses):
     drink = []
     for key,val in responses.items():
         if responses[key] == True:
             drink.append(random.choice(ingredients[key]))
         else:
-            pass
-    print(drink)
+            continue
+    return drink
+    
+def namedrink():
+    for key,val in customers.items():
+        drinknames[key] = random.choice(adjectives) + random.choice(nouns)
+        customers[key] = drinknames[key]
 
-if __name__ == '__main__':
-    order()
-    recipe()
+def introduction():
+    print("What's yer name?")
+    name = input()
+    customers[name] = "placeholder"
+
+def main():
+    introduction()
+    drinking = True
+    while drinking:
+        for key,val in customers.items():
+            if customers[key] == "placeholder":
+                responses = order()
+                drink = recipe(responses)
+                print("One drink coming up.")
+                print("It's full of good stuff. The recipe is: {}".format(drink))
+                namedrink()
+                print("I call it a {}".format(drinknames[key]))
+                print("")
+            else:
+                print("Here's another {}, {}!".format(customers[key],key))
+        print("Want another round?")
+        print("")
+        another = input().lower()
+        if another == "y":
+            continue
+        elif another == "yes":
+            continue
+        else:
+            print("I think you've had enough anyway...")
+            break
+    
+if __name__ == "__main__":
+    main()
